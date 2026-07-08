@@ -49,8 +49,8 @@
         /* Container principal 3D - diâmetro aumentado */
         .scene {
             width: 95%;
-            max-width: 600px; /* Aumentado de 500px para 600px */
-            height: 750px;    /* Aumentado de 600px para 750px */
+            max-width: 600px;
+            height: 750px;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
             position: relative;
@@ -65,13 +65,13 @@
             height: 100%;
             background: var(--panel-dark);
             border: 2px solid var(--neon-cyan);
-            border-radius: 24px; /* Aumentado para ficar mais arredondado */
-            padding: 35px;       /* Aumentado de 30px para 35px */
+            border-radius: 24px;
+            padding: 35px;
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.3),
                         inset 0 0 25px rgba(0, 243, 255, 0.15);
             display: flex;
             flex-direction: column;
-            gap: 25px;          /* Aumentado de 20px para 25px */
+            gap: 25px;
             position: absolute;
             backface-visibility: hidden;
             transition: 0.6s ease-in-out;
@@ -100,7 +100,7 @@
 
         h2 {
             text-shadow: 0 0 10px var(--neon-magenta), 0 0 20px var(--neon-magenta);
-            font-size: 1.6rem; /* Aumentado */
+            font-size: 1.6rem;
         }
 
         .input-group {
@@ -110,7 +110,7 @@
 
         input, textarea {
             width: 100%;
-            padding: 14px 18px; /* Aumentado */
+            padding: 14px 18px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--neon-purple);
             border-radius: 10px;
@@ -126,7 +126,7 @@
         }
 
         textarea {
-            height: 160px; /* Aumentado de 120px para 160px */
+            height: 160px;
             resize: none;
         }
 
@@ -182,7 +182,7 @@
             display: flex;
             flex-direction: column;
             gap: 18px;
-            min-height: 150px; /* Garante espaço mínimo */
+            min-height: 150px;
         }
 
         .notes-container::-webkit-scrollbar {
@@ -372,7 +372,7 @@
             box-shadow: 0 0 20px #ff3366;
         }
 
-        /* MODAL DE VISUALIZAÇÃO DE ARQUIVO (INDIVIDUAL) */
+        /* MODAL DE VISUALIZAÇÃO/EDIÇÃO DE ARQUIVO */
         #view-modal {
             display: none;
             position: fixed;
@@ -426,20 +426,62 @@
             border-top: 1px solid #222;
             padding-top: 10px;
         }
-        .view-box button {
-            width: auto;
+        .view-box .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .view-box .button-group button {
+            flex: 1;
+            min-width: 100px;
             padding: 10px 24px;
+            font-size: 0.9rem;
+        }
+        .view-box .button-group .edit-btn {
             border-color: var(--neon-cyan);
             color: var(--neon-cyan);
-            font-size: 0.9rem;
-            align-self: flex-end;
         }
-        .view-box button:hover {
+        .view-box .button-group .edit-btn:hover {
             background: var(--neon-cyan);
             color: #000;
         }
+        .view-box .button-group .close-btn {
+            border-color: #666;
+            color: #aaa;
+        }
+        .view-box .button-group .close-btn:hover {
+            background: #666;
+            color: #fff;
+        }
+        .view-box .button-group .save-edit-btn {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+        .view-box .button-group .save-edit-btn:hover {
+            background: var(--neon-purple);
+            color: #000;
+        }
+        .view-box .edit-input,
+        .view-box .edit-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+        .view-box .edit-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        .view-box .edit-input:focus,
+        .view-box .edit-textarea:focus {
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.3);
+        }
 
-        /* Exclusão individual protegida (senha a cada exclusão) */
+        /* Exclusão individual protegida */
         .delete-protected-btn {
             background: transparent;
             border: 1px solid #ff3366;
@@ -496,13 +538,23 @@
         </div>
     </div>
 
-    <!-- MODAL DE VISUALIZAÇÃO INDIVIDUAL -->
+    <!-- MODAL DE VISUALIZAÇÃO/EDIÇÃO -->
     <div id="view-modal">
         <div class="view-box">
-            <h3 id="view-title">Título</h3>
-            <div class="content-area" id="view-content">Conteúdo</div>
-            <div class="meta-info" id="view-meta">ID: 0000</div>
-            <button onclick="closeViewModal()">Fechar</button>
+            <div id="view-display">
+                <h3 id="view-title">Título</h3>
+                <div class="content-area" id="view-content">Conteúdo</div>
+                <div class="meta-info" id="view-meta">ID: 0000</div>
+            </div>
+            <div id="view-edit" style="display:none;">
+                <input class="edit-input" id="edit-title" placeholder="Título">
+                <textarea class="edit-textarea" id="edit-content" placeholder="Conteúdo..."></textarea>
+            </div>
+            <div class="button-group">
+                <button class="edit-btn" id="edit-toggle-btn" onclick="toggleEditMode()">✏️ Editar</button>
+                <button class="save-edit-btn" id="save-edit-btn" style="display:none;" onclick="saveEditedNote()">💾 Salvar</button>
+                <button class="close-btn" onclick="closeViewModal()">Fechar</button>
+            </div>
         </div>
     </div>
 
@@ -542,7 +594,6 @@
             
             <div class="danger-zone">
                 <button style="flex:2;" onclick="openDeleteModal()">🗑️ Apagar todos os dados</button>
-                <!-- Calculadora removida conforme solicitado -->
             </div>
         </div>
     </div>
@@ -551,6 +602,8 @@
         // ====== CONFIGURAÇÃO ======
         let SECRET_PASSWORD = localStorage.getItem('neon_password') || "1234";
         let notes = JSON.parse(localStorage.getItem('neon_notes')) || [];
+        let currentViewId = null;
+        let isEditMode = false;
 
         // ====== RELÓGIO DIGITAL ======
         function updateClocks() {
@@ -667,22 +720,99 @@
             alert('🗑️ Todos os dados foram apagados com segurança.');
         }
 
-        // ====== MODAL DE VISUALIZAÇÃO ======
-        let currentViewId = null;
-
+        // ====== MODAL DE VISUALIZAÇÃO/EDIÇÃO ======
         function openViewModal(noteId) {
             const note = notes.find(n => n.id === noteId);
             if (!note) return;
             currentViewId = noteId;
+            isEditMode = false;
+            
+            document.getElementById('view-display').style.display = 'block';
+            document.getElementById('view-edit').style.display = 'none';
+            document.getElementById('edit-toggle-btn').style.display = 'block';
+            document.getElementById('save-edit-btn').style.display = 'none';
+            
             document.getElementById('view-title').textContent = note.title;
             document.getElementById('view-content').textContent = note.content;
             document.getElementById('view-meta').textContent = `ID: ${note.id} · Criado em ${new Date(note.id).toLocaleString()}`;
+            
+            document.getElementById('edit-title').value = note.title;
+            document.getElementById('edit-content').value = note.content;
+            
             document.getElementById('view-modal').classList.add('active');
         }
 
         function closeViewModal() {
             document.getElementById('view-modal').classList.remove('active');
             currentViewId = null;
+            isEditMode = false;
+        }
+
+        function toggleEditMode() {
+            if (!currentViewId) return;
+            isEditMode = !isEditMode;
+            
+            if (isEditMode) {
+                document.getElementById('view-display').style.display = 'none';
+                document.getElementById('view-edit').style.display = 'block';
+                document.getElementById('edit-toggle-btn').textContent = '❌ Cancelar';
+                document.getElementById('edit-toggle-btn').style.borderColor = '#ff3366';
+                document.getElementById('edit-toggle-btn').style.color = '#ff6688';
+                document.getElementById('save-edit-btn').style.display = 'block';
+            } else {
+                document.getElementById('view-display').style.display = 'block';
+                document.getElementById('view-edit').style.display = 'none';
+                document.getElementById('edit-toggle-btn').textContent = '✏️ Editar';
+                document.getElementById('edit-toggle-btn').style.borderColor = 'var(--neon-cyan)';
+                document.getElementById('edit-toggle-btn').style.color = 'var(--neon-cyan)';
+                document.getElementById('save-edit-btn').style.display = 'none';
+                
+                // Restaurar valores originais
+                const note = notes.find(n => n.id === currentViewId);
+                if (note) {
+                    document.getElementById('edit-title').value = note.title;
+                    document.getElementById('edit-content').value = note.content;
+                }
+            }
+        }
+
+        function saveEditedNote() {
+            if (!currentViewId) return;
+            
+            const newTitle = document.getElementById('edit-title').value.trim();
+            const newContent = document.getElementById('edit-content').value.trim();
+            
+            if (!newTitle || !newContent) {
+                alert('❌ Título e conteúdo não podem estar vazios.');
+                return;
+            }
+            
+            // Solicitar senha para edição
+            const pass = prompt('🔒 Digite sua senha para salvar as alterações:');
+            if (pass === null) return;
+            if (pass !== SECRET_PASSWORD) {
+                alert('❌ Senha incorreta. Edição negada.');
+                return;
+            }
+            
+            const index = notes.findIndex(n => n.id === currentViewId);
+            if (index !== -1) {
+                notes[index].title = newTitle;
+                notes[index].content = newContent;
+                saveToStorage();
+                renderNotes();
+                
+                // Atualizar visualização
+                document.getElementById('view-title').textContent = newTitle;
+                document.getElementById('view-content').textContent = newContent;
+                document.getElementById('view-meta').textContent = `ID: ${currentViewId} · Editado em ${new Date().toLocaleString()}`;
+                
+                // Sair do modo de edição
+                isEditMode = true;
+                toggleEditMode();
+                
+                alert('✅ Arquivo editado com sucesso!');
+            }
         }
 
         // Fechar modais com ESC
@@ -774,4 +904,4 @@
         }
     </script>
 </body>
-</html>
+                    </html>
